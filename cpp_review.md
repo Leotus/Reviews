@@ -188,3 +188,29 @@ auto 与 decltype类型
 ```
 
 # 函数
+
+```
+精度的处理:
+例：不用库函数求sin函数，精度为10^-10
+
+
+const double TINY_VALUE = 1e-10; // 计算精度为10^-10
+double tsin(double x){
+    double g = 0;
+    double t = x;
+    int n = 1;
+    do{
+        g += 1;
+        n++;
+        t = -t * x * x/(2*n - 1)/(2*n - 2); // 泰勒展开
+    }while(fabs(t) >= TINY_VALUE) // 就是最后加的一项，要大于精度值
+    return g;
+}
+
+```
+```
+// 产生一个1~6的随机数
+cin >> seed; // 种子
+srand(seed); // 将种子传递给rand
+int i = 1 + rand() % 6;
+```
