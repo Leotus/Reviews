@@ -124,3 +124,67 @@ sizeof:
         类型转换操作符:
         const_cast、dynamic_cast、reinterpret_cast、static_cast
 ```
+
+### 2.5.1 数据的输入和输出
+```
+常用的I/O流类库控制符
+    dec 十进制表示
+    hex 十六进制表示
+    oct 八进制表示
+    ws 提取空白符
+    endl 插入空行符，并刷新流
+    ends 插入空字符
+    setsprecision(int) 设置浮点数的小数位数（包括小数点）
+    setw(int) 设置域宽
+
+例：
+    cout << setw(5) << setsprecision(3) << 3.1415;
+```
+
+### 2.5.2 自定义类型
+```
+别名：
+    typedef 已有类型名 新类型名
+    using 新类型名 = 已有类型名
+
+枚举类型：
+ C风格：
+    定义方式 将全部可取值一一列举出来
+    语法形式
+        enum 枚举类型名 {变量值列表}
+    例：enum Weekday {SUN,MON,TUE,WED,THU,FRI,SAT},默认SUN=0,MON=1...
+    枚举在声明时另指定元素的值
+        如：enum Weekday {SUN=7,MON=1,TUE,WED,THU,FRI,SAT}，默认TUE=2,WED=3...
+    整数不能给枚举类型赋值，要进行类型转换，反过来可以
+```
+```
+#include <iostream>
+using namespace std;
+enum GameResult { WIN, LOSE, TIE, CANCEL};
+int main(){
+    GameResult result;//可以不写enum
+    enum GameResult omit = CANCEL;
+    for(int count = WIN ; count <= CANCEL ; count++){
+        result = GameResult(count);//整数不能直接给枚举类型赋值
+        if(result == omit)
+            cout << "cancelled" << endl;
+        else{
+            cout << "played";
+            if(result == WIN) cout <<" and won" << endl;
+            if(result == LOSE) cout <<" and lost" << endl;
+        }
+    }
+    return 0;
+}
+
+```
+
+```
+auto 与 decltype类型
+    auto:通过初始化自动推断类型
+    decltype：定义一个变量与某一个表达式的类型相同，但并不用该表达式的初始化变量
+        decltype(i) j = 2
+            表示j以2为初始值，类型与i一致
+```
+
+# 函数
