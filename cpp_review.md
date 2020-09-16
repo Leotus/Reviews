@@ -214,3 +214,117 @@ cin >> seed; // 种子
 srand(seed); // 将种子传递给rand
 int i = 1 + rand() % 6;
 ```
+### CONSTEXPR函数
+constexpr修饰的函数在其所有参数都是constexpr时一定返回constexptr
+```
+constexpr int get_size(){return 20;}
+
+constexpr int foo = get_size();//正确：foo是一个常量表达式
+```
+
+### 函数重载
+1) 形参类型不同
+2) 形参个数不同
+3) **返回值类型不同不能算函数重载
+
+# 面向对象
+
+### 面向对象程序的基本特点
+1) 抽象
+2) 封装
+3) 继承
+4) 多态
+
+### 委托构造函数
+委托构造函数使用类的其他构造函数执行初始化过程
+例：
+```
+Clock(int newH,int newM,int newS):hour(newH),minute(newM),second(newS){}
+Clock:Clock(0,0,0){}
+```
+
+### 复制(拷贝)构造函数
+发生：
+1) 用一个对象初始化另一个
+2) 用实参初始化形参
+3) 返回一个临时的对象
+```
+int fun1(Point d){
+    return 0;
+}
+
+Point fun2(){
+    Point c;
+    return c;
+}
+
+Point b(a); // （1）
+fun1(b); // （2）
+b = fun2(); // （3） 这里其实还进行了赋值运算
+```
+
+### 前向引用声明
+例：
+```
+class B; // 前向引用声明
+class A{
+public:
+    void f(B b);
+};
+class B{
+public:
+    void g(A a);
+}
+```
+
+### 结构体
+```
+struct Student{
+    int num;
+    string name;
+    char sex;
+    int age;
+}
+Student stu = {97000,"Lin",'F',19}; // 结构体的初始化方式
+```
+
+### 联合体
+成员共用同一组内存单元
+任何两个成员不会同时有效
+```
+union 联合体名称{
+    公有成员
+protected:
+    保护型成员
+private:
+    私有成员
+}
+```
+例：
+```
+union Mark{ //表示成绩联合体
+    char grade; //等级制的成绩
+    bool pass; //只记录是否通过的成绩
+    int percent; //百分制的成绩
+};
+```
+说明变量grade、pass、percent将公用内存空间，后面如果改变一个，其他的也会改变
+```
+union{
+    int i;
+    float j;
+}
+i = 1;
+j = 2.5; //最后都会变成2.5，因为公用内存空间
+```
+
+### 枚举类
+```
+enum class 枚举类型名:底层类型{枚举值列表};//不指定底层类型，就是int
+```
+枚举类与C风格枚举相比好处：
+1) 强作用域，使用的时候要加上类型名，如：Type::General
+2) 转换限制，枚举类对象不再可以与整型进行转换
+3) 可以指定底层类型
+
+# 数据的共享与保护
