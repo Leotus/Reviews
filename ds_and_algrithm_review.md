@@ -1,3 +1,234 @@
+# L1
+# Analysis of Algorithms
+performance and resource usage
+# Problem: Sorting
+```
+Input:sequance<a1,a2,...an> of numbers
+Output:permutation<a1',a2',...an'>,and a1'< a2'<...an'
+```
+## Insertion sort(插入排序)
+```
+Insertion sort A[1...n]
+for j = 2 to n
+    do key = A[j]
+        i = j-1
+        while i>0 and A[i]>key
+            do A[i+1] = A[i]
+                i = i -1
+        A[i+1]=key
+```
+- Running time
+    1. Depends of input(eg.already sorted)
+    2. Depends of input size
+    3. Want upper bounds(guarantee of users)
+- Kinds of analysis
+    1. Worst-case:(usually)
+        - T(n):max time on any input of size size n
+    2. Average-case:(sometimes)
+        - T(n):expected time over all inputs of size n(Need assumption of stat.distr.)
+    3. Best-case(bogus,骗人的)
+        - Cheat
+- What's the ins sort's worst time?
+    - Depends on computer
+        - relative speed(on same computer)
+        - absolute speed(on diff computer)
+- BIG IDEA!!!:Asymptotic analysis
+    1. Ignore machine dependant constants
+    2. Look at growth of T(n) as n->无穷
+
+### Asymptotic notation(渐进符号)
+- θ-notation: Drop low order tems. Ingore leading constants
+```
+Ex : 3n^3 + 90n^2 - 5n + 6046 = θ(n^3)
+```
+- As n->infinity ,θ(n^2)alg always beats θ(n^3) alg(We look at the growth of T(n))
+
+### Insertion sort analysis
+Worst case:Input reverse sorted
+- T(n) = j 从 2 to n求和（θ(j)） = θ(n^2)
+
+## Merge sort(归并排序)
+1. If n=1,done
+2. Recursively sort A[1...n/2] and A[n/2+1...n]
+3. merge two sorted lists
+
+```
+Key subroutine :Merge
+    l1: 2 7 13 20
+    l2:1 9 11 12
+every time: find the min(on the front of every list) and write
+    1 2 7 9 11 13 20
+Time = θ(n) on n total elem s
+```
+- Recurrence 
+    - T(n) = θ(1) if n = 1(usually omit,通常省略这个)
+    - T(n) = 2T(n/2) + θ(n) = θ(nlgn) if n>1
+
+
+# L2
+
+# Asymptotic notation(渐进符号)
+# Big-O
+- f(n) = O(g(n)) (等号不是等于的意思，是上界)( means is not equal  )
+```
+means there are consts C>0 and n0>0 such that 0<= f(n)<=Cg(n) for all n>=n0 
+Ex: 2n^2 = O(n^3)
+
+根据上面可以做出定义：
+Set definition:
+O(g(n)) = { f(n) | there are constants c>0,n0>0 such that 0<=f(n)<=Cg(n) for all n>=n0 }
+```
+- Means Convention
+    - A set in a formula represents an anousymous function in that set.
+```
+Ex: f(n) = n^3 + O(n^2)
+means there is a function h(n) < O(n^2) such tath 
+f(n) = n^3 + h(n) 
+
+
+Ex: n^2 + O(n) = O(n^2)
+means for any f(n) ∈ O(n) there is an h(n) ∈ O(n^2) such that n^2+f(n) = h(n)
+```
+# Big-Ω：
+```
+Ω(g(n)) = { f(n) | there are exsit consts C>0, n0>0,such that 0<=Cg(n)<=f(n) for all n>=n0 }
+
+Ex:root n = Ω(lgn)
+```
+- Analogies(类比)
+```
+Big-O Big-Ω     θ   little-o    little-omega
+<=      >=      =       <              >
+```
+# θ notation
+- θ(g(n)) = O(g(n)) ∩ Ω(g(n)) (交集)
+
+# little o & ω notations
+```
+Ex 2n^2 = o(n^3)
+```
+
+# Solving recurrences
+# Substitution method
+    1. Giess the form of the solution
+    2. verify by induction
+    3. Solve for consts
+
+```
+Ex: T(n) = 4T(n/2) + n ; [T(1) = θ(1)]
+- Guess T(n) = O(n^3)
+- Assume T(k) <= Ck^3 for k < n
+- T(n) = 4T(n/2)+n
+        <= 4 C (n/2)^3 + n = 1/2 C n^3 + n
+                           = Cn^3 - (1/2 C n^3 + n)
+        <= Cn^3 if (1/2 C n^3 + n) >= 0 eg C>=1,n>1
+- Base T(1) = θ(1) <= C 1^3 if C chosen suffi large
+
+- Try T(n) = O(n^2)
+- Assume T(k) <= Ck^2 for k < n
+- T(n) = 4T(n/2)+n
+       <= 4 C (n/2)^2 + n = C n^2 + n
+                          = C n^2 - (-n)
+       <= C n^2 if (-n) >= 0 不成立
+
+如果你有神的指示，你能写出下面的假设
+- Assume T(k) <= C1 k^2 - C2 k for k<n
+- T(n) = 4T(n/2)+n
+        <=  4( C1 (n/2)^2 - C2(n/2) )+ n
+        = C1n^2 + (1-2C2)n
+        = C1 n^2 - C2 n - (-1+C2)n
+        <= C1 n^2 - C2 n if (C2 - 1) >= 0 if C2 >= 1
+- Base T(1) <= C1 - C2 if C1 suff large 
+```
+
+# Recursion-tree method
+```
+Ex T(n) = T(n/2) + T(n/4) + n^2
+```
+Expand 基本展开写法。代表加起来
+```
+T(n) =    n^2
+       |       |
+    T(n/2)      T(n/4)
+```
+```
+T(n) =    n^2                =      n^2
+       |       |                |       |
+    T(n/2)      T(n/4)      (n/2)^2     (n/4)^2
+                        |       |       |       |
+                    T(n/4)  T(n/8)      T(n/8) T(n/16)
+
+                    ...
+                    =   n^2          ———————————————n^2
+                     |       |
+                (n/2)^2     (n/4)^2 ——————————————5/16n^2
+            |       |       |       |
+         (n/4)^2  (n/8)^2   (n/8)^2  (n/16)^2  ——25/256n^2
+                        ...
+        θ(1)  θ(1)  θ(1)  θ(1)  .....
+
+
+        叶子节点总数 <=  n
+        每层分别求和
+        n^2
+        5/16n^2
+        25/256n^2
+        发现是一个等比数列
+
+knows:
+1 + 1/2 + 1/4 + .... = 2
+
+Total (level-by-level):
+ <= (1+5/16+25/256+....)n^2
+ < 2 n^2
+ = O(n^2)
+```
+
+# Main Method
+applies to recurrences of the form ```T(n)=a(n/b)+f(n)``` where a>=1,b>=1,f(n) asymptotically positive(渐进趋正)，存在一个n>=n0,f(n)>0
+```
+compare f(n) with n^logb(a)
+case1   f(n) = O(n^(logb(a) - ε))
+                for some ε > 0
+        => T(n)= θ(n^logb(a))
+case2   f(n) = θ(n^(logb(a)) * (lgn)^k)
+                    for some k >= 0
+        => T(n)= θ(n^logb(a) * (lgn)^(k+1))
+case3   f(n) = Ω(n^(logb(a) + ε))
+                    for some ε > 0
+                & af(n/b) <= (1-ε')f(n)
+                    for some ε' > 0
+        => T(n)= θ(f(n))
+```
+
+```
+Ex T(n) = 4T(n/2) + n
+
+    a = 4,b = 2,f(n) = n
+    n^logb(a) = n ^ log2(4) = n^2 >= f(n) = n
+    Case1 => T(n) = θ(n^2)
+```
+```
+Ex T(n) = 4T(n/2) + n^2
+
+    a = 4,b = 2,f(n) = n^2
+    n^logb(a) = n ^ log2(4) = n^2 = f(n) = n^2
+    Case2 => T(n) = θ(n^2 * lgn)
+```
+```
+Ex T(n) = 4T(n/2) + n^3
+
+    a = 4,b = 2,f(n) = n^3
+    n^logb(a) = n ^ log2(4) = n^2 < f(n) = n^3
+    Case3 => T(n) = θ(n^3)
+```
+```
+Ex T(n) = 4T(n/2) + n^2/lgn
+
+    a = 4,b = 2,f(n) = n^2/lgn
+Main Method did not apply
+```
+---------------------------------------------------------
 # 基本概念
 
 ### 时钟打点
@@ -427,6 +658,108 @@ int main()
 }
 ```
 # 树 2
+
+### 二叉搜索树(BST)/二叉排序树/二叉查找树
+- 二叉搜索树：
+    1. 非空左子树的所有键值小于其根节点的键值
+    2. 非空右子树的所有键值大于其根节点的键值
+    3. 左、右子树都是二叉搜索树
+
+#### 查找
+```
+递归查找：
+Position Find(ElementType X,BinTree BST)
+{
+    if(!BST) return NULL;// 查找失败
+    if(X > BST->Data) return Find(X,BST->Right); /* 在右子树中继续查找 */
+    else if(X < BST->Data) return Find(X,BST->Left); /* 在左子树中继续查找 */
+    else return BST;/* 找到了 */
+}
+非递归查找：
+Position IterFind(ElementType X,BinTree BST)
+{
+    while( BST ){
+        if(X > BST -> Data)
+            BST = BST -> Right;
+        else if(X < BST -> Data)
+            BST = BST -> Left;
+        else
+            return BST;
+    }
+    return NULL;
+}
+```
+```
+最小查找递归实现：
+Position FindMin(BinTree BST)
+{
+    if(!BST) return NULL;
+    else if(!BST->Left)
+        return BST;
+    else
+        return FindMin(BST->Left);
+}
+最大查找迭代实现：
+Position FindMax(BinTree BST)
+{
+    if(BST)
+        while(BST->Right) BST = BST->Right;
+    return BST;
+}
+
+```
+#### 插入
+```
+BinTree Insert(ElementType X,BinTree BST)
+{
+    if(!BST){
+        // 若树为空，生成并返回一个结点的二叉树
+        BST = malloc(sizeof(struct TreeNode));
+        BST->Data = X;
+        BST->Left = BST->Right( = NULL;
+    }else // 开始找要插入元素的位置
+        if(X<BST->Data)
+            BST->Left = Insert(X,BST->Right);
+                // 递归插入左子树
+        else if(X>BST->Data)
+            BST->Right = Insert(X,BST->Right);
+                // 递归插入右子树
+        // else X已经存在，什么都不做
+    return BST;
+}
+```
+#### 删除
+1. 删除的结点没有儿子，直接删除
+2. 删除的结点只有一个儿子，儿子代替原来的位置
+3. 删除的结点有两个儿子，在左子树中找一个最大的，或者在右子树中找一个最小的代替原来的位置
+
+```
+BinTree Delete(ElementType X,BinTree BST)
+{
+    Position Tmp;
+    if(!BST) cout << "没找到";
+    else if(X < BST->Data)
+        BST->Left = Delete(X,BST->Left);//左子树递归删除
+    else if(X > BST->Data)
+        BST->Right = Delete(X,BST->Right);//右子树递归删除
+    else 
+        if(BST->Left && BST->Right){// 被删除的结点有左右两个子树
+            Tmp = FindMin(BST->Right);
+            BST->Data = Tmp->Data;
+            BST->Right = Delete(BST->Data,BST->Right);
+        } else{
+            Tmp = BST;
+            if(!BST->Left){//有右孩子或无子结点
+                BST = BST->Right;
+            }
+            else if(!BST->Right)
+                BST = BST->Left;//有左孩子或无子结点
+            free(tmp);
+        }
+    return BST;
+}
+```
+### 平衡二叉树
 
 # 图 1
 
